@@ -39,6 +39,28 @@ body.light {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Sin recuadro azul al pulsar botones/enlaces (tienen su propio feedback). */
+button,
+a,
+[role="button"],
+.icon-cell,
+.color-dot,
+.menu-item {
+  outline: none;
+}
+
+button:focus,
+button:focus-visible,
+a:focus,
+a:focus-visible,
+[role="button"]:focus,
+.icon-cell:focus,
+.color-dot:focus,
+.menu-item:focus {
+  outline: none;
 }
 
 [hidden] {
@@ -1622,5 +1644,39 @@ body {
 
   .carousel {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Compacta la interfaz en teléfonos pequeños para que no se vea tan robusta. */
+@media (max-width: 430px) {
+  .phone {
+    padding: 26px 18px 108px;
+  }
+
+  .hello h1 {
+    font-size: 33px;
+  }
+
+  .bottom-bar {
+    padding: 12px 18px 20px;
+  }
+
+  .bar-actions {
+    gap: 10px;
+  }
+
+  .bar-actions .primary-btn,
+  .special-btn {
+    font-size: 12.5px;
+    padding: 12px 8px;
+    border-radius: 30px;
+  }
+
+  .primary-btn i {
+    font-size: 17px;
+  }
+
+  .special-btn i {
+    font-size: 15px;
   }
 }

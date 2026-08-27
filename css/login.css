@@ -25,6 +25,16 @@ body.light {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Sin recuadro azul al pulsar botones/enlaces. */
+button:focus,
+button:focus-visible,
+a:focus,
+a:focus-visible,
+[role="button"]:focus {
+  outline: none;
 }
 
 /* El atributo hidden debe ganar aunque haya reglas display: flex. */
