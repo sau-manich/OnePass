@@ -209,12 +209,18 @@ function showStep() {
   finalActions.hidden = !isFinal;
 }
 
+// Vibración corta como aviso háptico cuando algo falla.
+function buzz() {
+  if (navigator.vibrate) navigator.vibrate([28, 22, 28]);
+}
+
 function validateStep() {
   if (step === 1 && !form.title.value.trim()) {
     flash(form.title.closest(".g-field"));
     return false;
   }
   if (step === 2 && !form.icon) {
+    buzz();
     iconGrid.animate(
       [{ transform: "translateX(0)" }, { transform: "translateX(-6px)" }, { transform: "translateX(6px)" }, { transform: "translateX(0)" }],
       { duration: 250 }
@@ -231,6 +237,7 @@ function validateStep() {
 
 function flash(el) {
   if (!el) return;
+  buzz();
   el.animate(
     [
       { transform: "translateX(0)" },
@@ -921,7 +928,7 @@ const ACCENTS = {
   orange: { main: "#ffb066", d2: "#ff9445", softDark: "#3a2b18", softLight: "#ffeeda" },
   pink: { main: "#ec4f8f", d2: "#d63b78", softDark: "#3a1a2a", softLight: "#fce0ec" },
   green: { main: "#2fb673", d2: "#26955e", softDark: "#153020", softLight: "#d9f2e4" },
-  yellow: { main: "#f2c14e", d2: "#e0a92f", softDark: "#332a12", softLight: "#fbf1d6" },
+  violet: { main: "#8b5cf6", d2: "#7c3aed", softDark: "#241a3a", softLight: "#ece4fb" },
 };
 
 const hexToRgba = (hex, a) => {

@@ -71,6 +71,7 @@ function showError(el, msg) {
   el.textContent = msg;
   el.style.color = "var(--danger)";
   el.hidden = false;
+  if (navigator.vibrate) navigator.vibrate([28, 22, 28]);
 }
 function showHint(el, msg) {
   el.textContent = msg;

@@ -44,7 +44,7 @@ a:focus-visible,
 
 body {
   min-height: 100vh;
-  font-family: "Poppins", system-ui, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
   background: radial-gradient(circle at 50% -10%, var(--bg-2) 0%, var(--bg) 55%);
   color: var(--ink);
   display: flex;
@@ -102,8 +102,8 @@ body {
 }
 
 .login-title {
-  font-size: 30px;
-  font-weight: 800;
+  font-size: 29px;
+  font-weight: 700;
   letter-spacing: -0.5px;
 }
 

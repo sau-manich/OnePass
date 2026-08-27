@@ -92,7 +92,7 @@ a:focus-visible,
 }
 
 body {
-  font-family: "Poppins", system-ui, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
   background: var(--bg);
   color: var(--ink);
   min-height: 100vh;
@@ -132,10 +132,10 @@ body {
 }
 
 .hello h1 {
-  font-size: 42px;
-  line-height: 1.05;
-  font-weight: 800;
-  letter-spacing: -1px;
+  font-size: 38px;
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .hello .name {
@@ -415,6 +415,12 @@ body {
 
 .primary-btn i {
   font-size: 20px;
+  flex-shrink: 0;
+}
+
+.primary-btn span {
+  text-align: center;
+  line-height: 1.15;
 }
 
 /* ================= Modales ================= */
@@ -627,7 +633,7 @@ body {
   border-radius: 22px;
   overflow: hidden;
   box-shadow: 0 22px 44px -22px rgba(20, 30, 60, 0.5);
-  font-family: "Poppins", system-ui, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
   text-align: left;
 }
 
@@ -1151,6 +1157,7 @@ body {
   align-items: center;
   gap: 14px;
   margin-bottom: 22px;
+  padding-right: 48px;
 }
 
 .detail-icon {
@@ -1225,16 +1232,23 @@ body {
 
 .detail-actions {
   display: flex;
-  gap: 10px;
-  margin-top: 26px;
+  gap: 8px;
+  margin-top: 24px;
 }
 
 .detail-actions .ghost-btn,
 .detail-actions .next-btn {
   flex: 1;
-  padding-left: 8px;
-  padding-right: 8px;
+  min-width: 0;
+  padding: 12px 6px;
+  font-size: 13px;
+  gap: 6px;
   white-space: nowrap;
+}
+
+.detail-actions .ghost-btn i,
+.detail-actions .next-btn i {
+  font-size: 16px;
 }
 
 /* ================= Menú de usuario (avatar) ================= */
