@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OnePass — Iniciar sesión</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconoir/css/iconoir.css" />
+  <link rel="stylesheet" href="css/login.css" />
+</head>
+
+<body>
+  <button class="theme-btn" id="themeBtn" aria-label="Cambiar tema">
+    <i class="iconoir-half-moon"></i>
+  </button>
+
+  <main class="login-content">
+    <div class="login-logo"><i class="iconoir-lock"></i></div>
+    <h1 class="login-title">OnePass</h1>
+    <p class="login-sub">Ingresa tu código de 4 dígitos</p>
+
+    <form class="otp-form" id="otpForm" novalidate>
+      <div class="otp-inputs" id="otpInputs">
+        <input type="number" inputmode="numeric" maxlength="1" class="otp-digit" aria-label="Dígito 1" />
+        <input type="number" inputmode="numeric" maxlength="1" class="otp-digit" aria-label="Dígito 2" />
+        <input type="number" inputmode="numeric" maxlength="1" class="otp-digit" aria-label="Dígito 3" />
+        <input type="number" inputmode="numeric" maxlength="1" class="otp-digit" aria-label="Dígito 4" />
+      </div>
+
+      <p class="otp-error" id="otpError" hidden>Código incorrecto, intenta de nuevo.</p>
+
+      <button type="submit" class="otp-btn" id="otpBtn">
+        <i class="iconoir-log-in"></i> Ingresar
+      </button>
+    </form>
+
+    <div class="login-links">
+      <a href="#" id="createAccount">Crear nueva cuenta</a>
+      <a href="#" id="forgotCode">Olvidé mi código</a>
+    </div>
+  </main>
+
+  <footer class="login-footer">
+    2026 Copyright &copy; Saul Manich
+  </footer>
+
+  <!-- ================= MODAL: CREAR CUENTA ================= -->
+  <div class="auth-overlay" id="registerOverlay" aria-hidden="true">
+    <div class="auth-modal" role="dialog" aria-modal="true">
+      <button class="auth-close" id="regClose" aria-label="Cerrar"><i class="iconoir-xmark"></i></button>
+
+      <div class="auth-dots" id="regDots">
+        <span class="auth-dot"></span>
+        <span class="auth-dot"></span>
+        <span class="auth-dot"></span>
+        <span class="auth-dot"></span>
+      </div>
+
+      <!-- Paso 1: usuario + código -->
+      <section class="auth-pane" data-rpane="1">
+        <h2 class="auth-title">Crea tu cuenta</h2>
+        <p class="auth-desc">Elige tu nombre y un código de 4 dígitos.</p>
+        <div class="auth-field">
+          <label for="regUser">Nombre de usuario</label>
+          <div class="auth-input-wrap">
+            <i class="iconoir-user"></i>
+            <input type="text" id="regUser" maxlength="40" placeholder="Ej: Saul" />
+          </div>
+        </div>
+        <div class="auth-field">
+          <label>Código OnePass (4 dígitos)</label>
+          <div class="otp-inputs" id="regCodeInputs">
+            <input type="number" inputmode="numeric" maxlength="1" class="otp-digit" aria-label="Dígito 1" />
+            <input type="number" inputmode="numeric" maxlength="1" class="otp-digit" aria-label="Dígito 2" />
+            <input type="number" inputmode="numeric" maxlength="1" class="otp-digit" aria-label="Dígito 3" />
+            <input type="number" inputmode="numeric" maxlength="1" class="otp-digit" aria-label="Dígito 4" />
+          </div>
+        </div>
+      </section>
+
+      <!-- Pasos 2, 3 y 4: preguntas de seguridad -->
+      <section class="auth-pane" data-rpane="2" hidden>
+        <h2 class="auth-title">Pregunta de seguridad 1</h2>
+        <p class="auth-desc">Te servirá para recuperar tu código.</p>
+        <div class="auth-field">
+          <label>Elige una pregunta</label>
+          <select class="auth-select" data-qi="0"></select>
+        </div>
+        <div class="auth-field">
+          <label>Tu respuesta</label>
+          <div class="auth-input-wrap">
+            <i class="iconoir-chat-bubble-question"></i>
+            <input type="text" class="auth-answer" data-ai="0" placeholder="Escribe tu respuesta" />
+          </div>
+        </div>
+      </section>
+
+      <section class="auth-pane" data-rpane="3" hidden>
+        <h2 class="auth-title">Pregunta de seguridad 2</h2>
+        <p class="auth-desc">Elige una diferente a la anterior.</p>
+        <div class="auth-field">
+          <label>Elige una pregunta</label>
+          <select class="auth-select" data-qi="1"></select>
+        </div>
+        <div class="auth-field">
+          <label>Tu respuesta</label>
+          <div class="auth-input-wrap">
+            <i class="iconoir-chat-bubble-question"></i>
+            <input type="text" class="auth-answer" data-ai="1" placeholder="Escribe tu respuesta" />
+          </div>
+        </div>
+      </section>
+
+      <section class="auth-pane" data-rpane="4" hidden>
+        <h2 class="auth-title">Pregunta de seguridad 3</h2>
+        <p class="auth-desc">La última y creamos tu cuenta.</p>
+        <div class="auth-field">
+          <label>Elige una pregunta</label>
+          <select class="auth-select" data-qi="2"></select>
+        </div>
+        <div class="auth-field">
+          <label>Tu respuesta</label>
+          <div class="auth-input-wrap">
+            <i class="iconoir-chat-bubble-question"></i>
+            <input type="text" class="auth-answer" data-ai="2" placeholder="Escribe tu respuesta" />
+          </div>
+        </div>
+      </section>
+
+      <p class="auth-error" id="regError" hidden></p>
+
+      <div class="auth-actions">
+        <button class="ghost-btn" id="regPrev" hidden><i class="iconoir-nav-arrow-left"></i> Atrás</button>
+        <button class="next-btn" id="regNext">Siguiente <i class="iconoir-nav-arrow-right"></i></button>
+        <button class="next-btn" id="regSave" hidden><i class="iconoir-check"></i> Crear cuenta</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: RECUPERAR CÓDIGO ================= -->
+  <div class="auth-overlay" id="recoverOverlay" aria-hidden="true">
+    <div class="auth-modal" role="dialog" aria-modal="true">
+      <button class="auth-close" id="recClose" aria-label="Cerrar"><i class="iconoir-xmark"></i></button>
+
+      <h2 class="auth-title">Recuperar código</h2>
+      <p class="auth-desc">Responde tus preguntas y elige un nuevo código.</p>
+      <div id="recQuestions"></div>
+      <div class="auth-field">
+        <label>Nuevo código (4 dígitos)</label>
+        <div class="otp-inputs" id="recCodeInputs">
+          <input type="number" inputmode="numeric" maxlength="1" class="otp-digit" aria-label="Dígito 1" />
+          <input type="number" inputmode="numeric" maxlength="1" class="otp-digit" aria-label="Dígito 2" />
+          <input type="number" inputmode="numeric" maxlength="1" class="otp-digit" aria-label="Dígito 3" />
+          <input type="number" inputmode="numeric" maxlength="1" class="otp-digit" aria-label="Dígito 4" />
+        </div>
+      </div>
+
+      <p class="auth-error" id="recError" hidden></p>
+
+      <div class="auth-actions">
+        <button class="next-btn" id="recSave"><i class="iconoir-check"></i> Cambiar código</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/db.js"></script>
+  <script src="js/login.js"></script>
+</body>
+
+</html>

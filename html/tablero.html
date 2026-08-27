@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OnePass — Guarda tus contraseñas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/iconoir/css/iconoir.css" />
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+
+<body>
+  <div class="phone" id="app">
+    <!-- ===== Header ===== -->
+    <header class="header">
+      <div class="header-top">
+        <div class="hello">
+          <h1>Hola</h1>
+          <h1 class="name">Saul!</h1>
+        </div>
+        <div class="header-actions">
+          <button class="theme-btn" id="themeBtn" aria-label="Cambiar tema">
+            <i class="iconoir-half-moon"></i>
+          </button>
+          <div class="avatar-wrap">
+            <button class="avatar" id="avatarBtn" aria-label="Cuenta" aria-haspopup="true" aria-expanded="false">
+              <span class="ring"></span>
+              <i class="iconoir-user"></i>
+            </button>
+            <div class="menu-pop" id="avatarMenu" hidden>
+              <div class="color-row" id="colorRow">
+                <button class="color-dot" data-accent="blue" style="--c:#3b6fd6" aria-label="Azul marino"></button>
+                <button class="color-dot" data-accent="orange" style="--c:#ffb066" aria-label="Naranja"></button>
+                <button class="color-dot" data-accent="pink" style="--c:#ec4f8f" aria-label="Rosado"></button>
+                <button class="color-dot" data-accent="green" style="--c:#2fb673" aria-label="Verde"></button>
+                <button class="color-dot" data-accent="yellow" style="--c:#f2c14e" aria-label="Amarillo"></button>
+              </div>
+              <div class="menu-grid">
+                <button class="menu-item" id="importBtn"><i class="iconoir-import"></i> Importar</button>
+                <button class="menu-item" id="exportBtn"><i class="iconoir-upload"></i> Exportar</button>
+              </div>
+              <input type="file" id="importFile" accept="application/json,.json" hidden />
+              <button class="menu-item" id="manageBtn"><i class="iconoir-settings"></i> Administrar cuenta</button>
+              <button class="menu-item logout" id="logoutBtn"><i class="iconoir-log-out"></i> Cerrar sesión</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="subtitle">
+        Tienes <span class="badge" id="countBadge">0 contraseñas</span> <span id="savedWord">guardadas</span>
+      </p>
+      <div class="search-box">
+        <i class="iconoir-search"></i>
+        <input type="text" id="searchInput" placeholder="Buscar contraseña…" autocomplete="off" />
+        <button class="search-clear" id="searchClear" aria-label="Limpiar" hidden><i class="iconoir-xmark"></i></button>
+      </div>
+    </header>
+
+    <!-- ===== Carrusel de cards ===== -->
+    <section class="carousel" id="carousel" aria-label="Contraseñas guardadas">
+      <!-- Las cards se inyectan por JS -->
+    </section>
+
+    <!-- ===== Menú inferior ===== -->
+    <nav class="bottom-bar">
+      <div class="bar-actions">
+        <button class="primary-btn" id="openCreate">
+          <i class="iconoir-plus"></i>
+          <span>Nueva contraseña</span>
+        </button>
+        <button class="special-btn" id="openSpecial">
+          <i class="iconoir-sparks"></i>
+          <span>Contraseña especial</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ================= MODAL: CREAR ================= -->
+  <div class="modal-overlay" id="createOverlay" aria-hidden="true">    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="createTitle">
+      <button class="modal-close" id="closeCreate" aria-label="Cerrar">
+        <i class="iconoir-xmark"></i>
+      </button>
+
+      <!-- Línea de tiempo -->
+      <div class="steps" id="stepsBar">
+        <div class="step-node" data-step="1"><span class="dot">1</span><small>Paso 1</small></div>
+        <div class="step-node" data-step="2"><span class="dot">2</span><small>Paso 2</small></div>
+        <div class="step-node" data-step="3"><span class="dot">3</span><small>Paso 3</small></div>
+        <div class="step-node" data-step="4"><span class="dot">4</span><small>Paso 4</small></div>
+        <div class="step-node" data-step="5"><span class="dot">5</span><small>Paso 5</small></div>
+      </div>
+
+      <div class="modal-body">
+        <!-- Paso 1: título -->
+        <section class="pane" data-pane="1">
+          <h2 id="createTitle" class="pane-title">Título de la contraseña</h2>
+          <p class="pane-desc">¿De qué es esta contraseña? Ej: Netflix, Banco, Gmail…</p>
+          <div class="g-field">
+            <label for="fTitle">Título</label>
+            <input type="text" id="fTitle" placeholder="Ej: Cuenta de Netflix" autocomplete="off" />
+          </div>
+        </section>
+
+        <!-- Paso 2: icono -->
+        <section class="pane" data-pane="2" hidden>
+          <h2 class="pane-title">Elige un icono</h2>
+          <p class="pane-desc">Selecciona el que mejor represente esta contraseña.</p>
+          <div class="icon-grid" id="iconGrid"><!-- iconos por JS --></div>
+        </section>
+
+        <!-- Paso 3: usuario y contraseña -->
+        <section class="pane" data-pane="3" hidden>
+          <h2 class="pane-title">Usuario y contraseña</h2>
+          <p class="pane-desc">Escribe las credenciales que quieres recordar.</p>
+          <div class="g-field">
+            <label for="fUser">Usuario</label>
+            <input type="text" id="fUser" placeholder="usuario@gmail.com" autocomplete="off" />
+          </div>
+          <div class="g-field with-action">
+            <label for="fPass">Contraseña</label>
+            <input type="password" id="fPass" placeholder="••••••••" autocomplete="off" />
+            <button type="button" class="eye-btn" id="togglePass" aria-label="Mostrar contraseña">
+              <i class="iconoir-eye"></i>
+            </button>
+          </div>
+        </section>
+
+        <!-- Paso 4: detalle -->
+        <section class="pane" data-pane="4" hidden>
+          <h2 class="pane-title">Detalle o referencia</h2>
+          <p class="pane-desc">Anota de dónde viene o algo que te ayude a recordarla.</p>
+          <div class="g-field">
+            <label for="fNote">Detalle</label>
+            <textarea id="fNote" rows="4" placeholder="Ej: Cuenta creada con el correo del trabajo, pregunta secreta: mi primera mascota…"></textarea>
+          </div>
+        </section>
+
+        <!-- Paso 5: felicidades -->
+        <section class="pane pane-final" data-pane="5" hidden>
+          <div class="celebrate"><i class="iconoir-medal"></i></div>
+          <h2 class="pane-title">¡Felicidades!</h2>
+          <p class="pane-desc">Guardaste una nueva contraseña para que no se te olvide a futuro.<br />¿Deseas descargarla?</p>
+        </section>
+      </div>
+
+      <!-- Footer de navegación -->
+      <div class="modal-footer">
+        <button class="ghost-btn" id="prevBtn" hidden>
+          <i class="iconoir-nav-arrow-left"></i> Atrás
+        </button>
+        <button class="next-btn" id="nextBtn">
+          Siguiente <i class="iconoir-nav-arrow-right"></i>
+        </button>
+        <div class="final-actions" id="finalActions" hidden>
+          <button class="ghost-btn" id="downloadBtn"><i class="iconoir-download"></i> Descargar</button>
+          <button class="next-btn" id="saveBtn"><i class="iconoir-check"></i> Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CONTRASEÑA ESPECIAL ================= -->
+  <div class="modal-overlay" id="specialOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="specialTitle">
+      <button class="modal-close" id="closeSpecial" aria-label="Cerrar">
+        <i class="iconoir-xmark"></i>
+      </button>
+      <div class="special-head">
+        <div class="special-badge"><i class="iconoir-sparks"></i></div>
+        <div>
+          <h2 id="specialTitle" class="pane-title">Contraseña especial</h2>
+          <p class="pane-desc">Escribe un valor o elige una cuenta que ya guardaste.</p>
+        </div>
+      </div>
+
+      <div id="specialForm">
+        <div class="g-field combo-field">
+          <label for="sUser">Usuario</label>
+          <input id="sUser" placeholder="Escribe o elige una cuenta" autocomplete="off" />
+          <i class="iconoir-nav-arrow-down sel-arrow"></i>
+          <ul class="combo-list" id="usersList" hidden></ul>
+        </div>
+        <div class="g-field combo-field">
+          <label for="sPass">Contraseña</label>
+          <input id="sPass" placeholder="Escribe o elige una cuenta" autocomplete="off" />
+          <i class="iconoir-nav-arrow-down sel-arrow"></i>
+          <ul class="combo-list" id="passList" hidden></ul>
+        </div>
+        <div class="g-field">
+          <label for="sNote">Detalle</label>
+          <textarea id="sNote" rows="3" placeholder="¿Por qué esta combinación? Anota algo que te ayude a recordar."></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="next-btn" id="saveSpecial"><i class="iconoir-check"></i> Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: ADMINISTRAR CUENTA ================= -->
+  <div class="modal-overlay" id="manageOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="manageTitle">
+      <button class="modal-close" id="closeManage" aria-label="Cerrar">
+        <i class="iconoir-xmark"></i>
+      </button>
+      <div class="special-head">
+        <div class="special-badge"><i class="iconoir-settings"></i></div>
+        <div>
+          <h2 id="manageTitle" class="pane-title">Administrar cuenta</h2>
+          <p class="pane-desc">Cambia tu nombre, tu código o tus preguntas.</p>
+        </div>
+      </div>
+
+      <div class="manage-scroll">
+        <div class="g-field">
+          <label for="mUser">Nombre de usuario</label>
+          <input type="text" id="mUser" maxlength="40" placeholder="Tu nombre" autocomplete="off" />
+        </div>
+
+        <div class="g-field with-action">
+          <label for="mCode">Nuevo código (opcional)</label>
+          <input type="password" id="mCode" inputmode="numeric" maxlength="4" placeholder="Déjalo vacío para no cambiarlo" autocomplete="off" />
+          <button class="eye-btn" id="mCodeToggle" type="button" aria-label="Mostrar código"><i class="iconoir-eye"></i></button>
+        </div>
+
+        <p class="manage-note"><i class="iconoir-lock"></i> Preguntas de seguridad. Deja las respuestas vacías para conservarlas.</p>
+
+        <div class="g-field select-field">
+          <label>Pregunta 1</label>
+          <select class="m-select" data-mqi="0"></select>
+          <i class="iconoir-nav-arrow-down sel-arrow"></i>
+        </div>
+        <div class="g-field">
+          <label>Respuesta 1</label>
+          <input type="text" class="m-answer" data-mai="0" placeholder="Nueva respuesta" autocomplete="off" />
+        </div>
+
+        <div class="g-field select-field">
+          <label>Pregunta 2</label>
+          <select class="m-select" data-mqi="1"></select>
+          <i class="iconoir-nav-arrow-down sel-arrow"></i>
+        </div>
+        <div class="g-field">
+          <label>Respuesta 2</label>
+          <input type="text" class="m-answer" data-mai="1" placeholder="Nueva respuesta" autocomplete="off" />
+        </div>
+
+        <div class="g-field select-field">
+          <label>Pregunta 3</label>
+          <select class="m-select" data-mqi="2"></select>
+          <i class="iconoir-nav-arrow-down sel-arrow"></i>
+        </div>
+        <div class="g-field">
+          <label>Respuesta 3</label>
+          <input type="text" class="m-answer" data-mai="2" placeholder="Nueva respuesta" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="next-btn" id="saveManage"><i class="iconoir-check"></i> Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: DETALLE ================= -->
+  <div class="modal-overlay" id="detailOverlay" aria-hidden="true">
+    <div class="modal detail-modal" role="dialog" aria-modal="true">
+      <button class="modal-close" id="closeDetail" aria-label="Cerrar">
+        <i class="iconoir-xmark"></i>
+      </button>
+      <div class="detail-head">
+        <div class="detail-icon" id="dIcon"><i class="iconoir-lock"></i></div>
+        <h2 id="dTitle">Título</h2>
+      </div>
+      <div class="detail-rows">
+        <div class="detail-row">
+          <span class="d-label"><i class="iconoir-user"></i> Usuario</span>
+          <span class="d-value" id="dUser"></span>
+        </div>
+        <div class="detail-row">
+          <span class="d-label"><i class="iconoir-key"></i> Contraseña</span>
+          <span class="d-value pass" id="dPass"></span>
+          <button class="eye-btn small" id="dToggle" aria-label="Mostrar"><i class="iconoir-eye"></i></button>
+        </div>
+        <div class="detail-note">
+          <span class="d-label"><i class="iconoir-notes"></i> Detalle</span>
+          <p id="dNote"></p>
+        </div>
+      </div>
+      <div class="detail-actions">
+        <button class="ghost-btn danger" id="deleteBtn"><i class="iconoir-trash"></i> Eliminar</button>
+        <button class="ghost-btn" id="detailDownloadBtn"><i class="iconoir-download"></i> Descargar</button>
+        <button class="next-btn" id="editBtn"><i class="iconoir-edit-pencil"></i> Editar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CONFIRMAR ELIMINAR ================= -->
+  <div class="modal-overlay confirm-overlay" id="confirmOverlay" aria-hidden="true">
+    <div class="confirm-modal" role="alertdialog" aria-modal="true">
+      <div class="confirm-icon"><i class="iconoir-trash"></i></div>
+      <h3>Eliminar contraseña</h3>
+      <p>¿Seguro que quieres eliminar esta contraseña? No podrás recuperarla.</p>
+      <div class="confirm-actions">
+        <button class="confirm-cancel" id="confirmCancel">Cancelar</button>
+        <button class="confirm-delete" id="confirmDelete"><i class="iconoir-trash"></i> Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: PREVISUALIZAR DESCARGA ================= -->
+  <div class="modal-overlay preview-overlay" id="previewOverlay" aria-hidden="true">
+    <div class="modal preview-modal" role="dialog" aria-modal="true">
+      <button class="modal-close" id="closePreview" aria-label="Cerrar"><i class="iconoir-xmark"></i></button>
+      <h2 class="preview-title">Vista previa</h2>
+      <p class="preview-sub">Así se verá tu reporte antes de descargarlo.</p>
+
+      <div class="report-wrap">
+        <div class="report-card" id="reportCard">
+          <div class="report-top">
+            <div class="report-brand">
+              <span class="report-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15" r="1.2"/></svg></span>
+              <div class="report-brand-text">
+                <b>OnePass</b>
+                <small>Gestor de contraseñas</small>
+              </div>
+            </div>
+            <span class="report-seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l7 2.8v5c0 4.4-3 7.6-7 9-4-1.4-7-4.6-7-9v-5l7-2.8z"/><path d="M9 12l2 2 4-4.2"/></svg></span>
+          </div>
+
+          <div class="report-hero">
+            <div class="report-hero-icon" id="rIcon"></div>
+            <h3 id="rTitle">Título</h3>
+            <span class="report-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.3"/><path d="M8.4 12.2l2.4 2.4 4.6-5"/></svg> Contraseña guardada</span>
+          </div>
+
+          <div class="report-fields">
+            <div class="report-field">
+              <span class="rf-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 19c0-3.2 3-4.8 6.5-4.8s6.5 1.6 6.5 4.8"/></svg> Usuario</span>
+              <span class="rf-value" id="rUser"></span>
+            </div>
+            <div class="report-field">
+              <span class="rf-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="3.8"/><path d="M11.7 11.7L19 19"/><path d="M16.5 16.5l1.8 1.8M18 14.5l1.5 1.5"/></svg> Contraseña</span>
+              <span class="rf-value" id="rPass"></span>
+            </div>
+            <div class="report-field report-field-col">
+              <span class="rf-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5.5" y="3.5" width="13" height="17" rx="2.2"/><path d="M8.5 8.5h7M8.5 12h7M8.5 15.5h4"/></svg> Detalle</span>
+              <p class="rf-note" id="rNote"></p>
+            </div>
+          </div>
+
+          <div class="report-foot">
+            <span class="report-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="5.5" width="15" height="14" rx="2.5"/><path d="M8 3.5v4M16 3.5v4M4.7 10h14.6"/></svg> <span id="rDate"></span></span>
+            <span class="report-foot-brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15" r="1.2"/></svg> OnePass</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-actions">
+        <button class="ghost-btn" id="dlImage"><i class="iconoir-media-image"></i> Imagen</button>
+        <button class="next-btn" id="dlPdf"><i class="iconoir-page"></i> PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="../js/db.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+
+</html>
