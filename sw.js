@@ -1,5 +1,5 @@
 // Service Worker de OnePass (PWA)
-const CACHE = "onepass-v1";
+const CACHE = "onepass-v2";
 
 const ASSETS = [
   "./",
@@ -11,7 +11,7 @@ const ASSETS = [
   "./js/db.js",
   "./js/login.js",
   "./js/app.js",
-  "./img/LogoOnePass.png",
+  "./img/LogoOfi.png",
   "./img/icon-192.png",
   "./img/icon-512.png",
 ];
