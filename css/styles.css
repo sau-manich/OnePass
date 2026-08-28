@@ -5,8 +5,8 @@
   --ink: #eceef2;
   --ink-soft: #9096a1;
   --bg: #1a1b1f;
-  --card: #20222a;
-  --card-hover: #2a2c34;
+  --card: #292b34;
+  --card-hover: #33353f;
   --border: #3a3d47;
   --line: #2c2f38;
   --green: #2fc18c;
@@ -365,14 +365,23 @@ body {
   color: var(--ink-soft);
   background: var(--card);
   border-radius: var(--radius);
-  padding: 46px 24px;
+  padding: 38px 22px;
   box-shadow: var(--shadow);
 }
 
 .card-empty i {
-  font-size: 42px;
+  font-size: 34px;
   color: var(--purple);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+}
+
+.card-empty b {
+  font-size: 15px;
+}
+
+.card-empty p {
+  font-size: 12.5px;
+  margin-top: 3px;
 }
 
 /* ================= Menú inferior ================= */

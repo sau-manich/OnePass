@@ -35,10 +35,17 @@ let items = load();
 let editingId = null;
 
 // Guardia de sesión: sin usuario logueado, volvemos al login.
-const sessionUser = DB.currentUser();
-if (!sessionUser) {
-  window.location.replace("../index.html");
+function guardSession() {
+  if (!DB.currentUser()) {
+    window.location.replace("../index.html");
+    return false;
+  }
+  return true;
 }
+const sessionUser = DB.currentUser();
+guardSession();
+// Revalida al restaurar la página desde la caché (botón atrás / bfcache).
+window.addEventListener("pageshow", guardSession);
 
 function load() {
   const u = DB.currentUser();
