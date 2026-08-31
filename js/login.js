@@ -1,6 +1,24 @@
 // ================= OnePass — Login / Registro / Recuperación =================
 // Todo funciona con HTML/CSS/JS puro apoyándose en DB (js/db.js + localStorage).
 
+// ---- Vibración háptica (aviso al fallar algo) ----
+function buzz() {
+  try {
+    if ("vibrate" in navigator) navigator.vibrate([0, 60, 30, 60]);
+  } catch (e) {}
+}
+// Algunos Android/Samsung ignoran la primera vibración hasta que hay un gesto
+// real, así que la "despertamos" con un micro-pulso en el primer toque.
+window.addEventListener(
+  "pointerdown",
+  () => {
+    try {
+      if ("vibrate" in navigator) navigator.vibrate(1);
+    } catch (e) {}
+  },
+  { once: true }
+);
+
 // ---- Tema claro / oscuro (compartido con el tablero) ----
 const themeBtn = document.getElementById("themeBtn");
 
@@ -71,7 +89,7 @@ function showError(el, msg) {
   el.textContent = msg;
   el.style.color = "var(--danger)";
   el.hidden = false;
-  if (navigator.vibrate) navigator.vibrate([28, 22, 28]);
+  buzz();
 }
 function showHint(el, msg) {
   el.textContent = msg;

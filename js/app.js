@@ -218,8 +218,22 @@ function showStep() {
 
 // Vibración corta como aviso háptico cuando algo falla.
 function buzz() {
-  if (navigator.vibrate) navigator.vibrate([28, 22, 28]);
+  try {
+    if ("vibrate" in navigator) navigator.vibrate([0, 60, 30, 60]);
+  } catch (e) {}
 }
+
+// Algunos Android/Samsung ignoran la primera vibración hasta que hay un gesto
+// real, así que la "despertamos" con un micro-pulso en el primer toque.
+window.addEventListener(
+  "pointerdown",
+  () => {
+    try {
+      if ("vibrate" in navigator) navigator.vibrate(1);
+    } catch (e) {}
+  },
+  { once: true }
+);
 
 function validateStep() {
   if (step === 1 && !form.title.value.trim()) {
@@ -808,6 +822,7 @@ $("#saveManage").addEventListener("click", () => {
 });
 
 // ================= Modal contraseña especial =================
+const sTitle = $("#sTitle");
 const sUser = $("#sUser");
 const sPass = $("#sPass");
 const sNote = $("#sNote");
@@ -874,6 +889,7 @@ function matchTitle(text) {
 function openSpecial(id = null) {
   editingSpecialId = id;
   const existing = id ? items.find((i) => i.id === id) : null;
+  sTitle.value = existing?.title || "";
   sUser.value = existing
     ? existing.userRef
       ? refItem(existing.userRef)?.title || existing.userVal || ""
@@ -899,9 +915,10 @@ document.addEventListener("click", (e) => {
 });
 
 $("#saveSpecial").addEventListener("click", () => {
+  const tText = sTitle.value.trim();
   const uText = sUser.value.trim();
   const pText = sPass.value.trim();
-  if (!uText || !pText) return;
+  if (!tText || !uText || !pText) return;
 
   const uMatch = matchTitle(uText);
   const pMatch = matchTitle(pText);
@@ -909,7 +926,7 @@ $("#saveSpecial").addEventListener("click", () => {
   const data = {
     special: true,
     icon: "sparks",
-    title: uText === pText ? uText : `${uText} / ${pText}`,
+    title: tText,
     userRef: uMatch ? uMatch.id : null,
     userVal: uMatch ? null : uText,
     passRef: pMatch ? pMatch.id : null,
