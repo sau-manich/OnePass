@@ -1,5 +1,5 @@
 // Service Worker de OnePass (PWA)
-const CACHE = "onepass-v2";
+const CACHE = "onepass-v4";
 
 const ASSETS = [
   "./",
@@ -51,20 +51,20 @@ self.addEventListener("fetch", (e) => {
     return;
   }
 
-  // Resto: caché primero, con respaldo a red.
+  // Resto: responde con la caché al instante pero refresca en segundo plano
+  // (stale-while-revalidate), así el siguiente arranque ya trae lo último.
   e.respondWith(
-    caches.match(req).then(
-      (cached) =>
-        cached ||
-        fetch(req)
-          .then((res) => {
-            if (res && res.status === 200 && res.type === "basic") {
-              const copy = res.clone();
-              caches.open(CACHE).then((c) => c.put(req, copy));
-            }
-            return res;
-          })
-          .catch(() => cached)
-    )
+    caches.match(req).then((cached) => {
+      const fetched = fetch(req)
+        .then((res) => {
+          if (res && res.status === 200 && res.type === "basic") {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(req, copy));
+          }
+          return res;
+        })
+        .catch(() => cached);
+      return cached || fetched;
+    })
   );
 });

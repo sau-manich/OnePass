@@ -918,7 +918,12 @@ $("#saveSpecial").addEventListener("click", () => {
   const tText = sTitle.value.trim();
   const uText = sUser.value.trim();
   const pText = sPass.value.trim();
-  if (!tText || !uText || !pText) return;
+  if (!tText || !uText || !pText) {
+    if (!tText) flash(sTitle.closest(".g-field"));
+    if (!uText) flash(sUser.closest(".g-field"));
+    if (!pText) flash(sPass.closest(".g-field"));
+    return;
+  }
 
   const uMatch = matchTitle(uText);
   const pMatch = matchTitle(pText);
@@ -941,6 +946,10 @@ $("#saveSpecial").addEventListener("click", () => {
   }
   persist();
   renderCards();
+  sTitle.value = "";
+  sUser.value = "";
+  sPass.value = "";
+  sNote.value = "";
   closeOverlay(specialOverlay);
 });
 
